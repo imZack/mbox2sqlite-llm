@@ -10,3 +10,6 @@ venv
 *.db
 *.mbox
 *.dylib
+uv.lock
+dist/
+build/

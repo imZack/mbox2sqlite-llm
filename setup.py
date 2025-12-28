@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.9.0.dev.dev2"
+VERSION = "0.9.0"
 
 
 def get_long_description():
@@ -39,5 +39,5 @@ setup(
         "quotequail>=0.2.0",  # For quoted reply detection
     ],
     extras_require={"test": ["pytest"]},
-    python_requires=">=3.7",
+    python_requires=">=3.10",
 )

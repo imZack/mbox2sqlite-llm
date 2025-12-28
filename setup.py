@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.1a0"
+VERSION = "0.9.0"
 
 
 def get_long_description():
@@ -13,25 +13,31 @@ def get_long_description():
 
 
 setup(
-    name="mbox-to-sqlite",
-    description="Load email from .mbox files into SQLite",
+    name="mbox2sqlite-llm",
+    description="Load email from .mbox files into SQLite with Gmail support and LLM optimization",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
-    author="Simon Willison",
-    url="https://github.com/simonw/mbox-to-sqlite",
+    author="Zack Shih",
+    url="https://github.com/imZack/mbox-to-sqlite",
     project_urls={
-        "Issues": "https://github.com/simonw/mbox-to-sqlite/issues",
-        "CI": "https://github.com/simonw/mbox-to-sqlite/actions",
-        "Changelog": "https://github.com/simonw/mbox-to-sqlite/releases",
+        "Issues": "https://github.com/imZack/mbox-to-sqlite/issues",
+        "CI": "https://github.com/imZack/mbox-to-sqlite/actions",
+        "Changelog": "https://github.com/imZack/mbox-to-sqlite/releases",
     },
     license="Apache License, Version 2.0",
     version=VERSION,
     packages=["mbox_to_sqlite"],
     entry_points="""
         [console_scripts]
-        mbox-to-sqlite=mbox_to_sqlite.cli:cli
+        mbox2sqlite-llm=mbox_to_sqlite.cli:cli
     """,
-    install_requires=["click", "sqlite-utils"],
+    install_requires=[
+        "click",
+        "sqlite-utils",
+        "html2text>=2020.1.16",
+        "beautifulsoup4>=4.9.0",
+        "quotequail>=0.2.0",  # For quoted reply detection
+    ],
     extras_require={"test": ["pytest"]},
     python_requires=">=3.7",
 )

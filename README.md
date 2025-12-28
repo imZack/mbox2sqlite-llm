@@ -1,32 +1,88 @@
 # mbox-to-sqlite
 
-[![PyPI](https://img.shields.io/pypi/v/mbox-to-sqlite.svg)](https://pypi.org/project/mbox-to-sqlite/)
-[![Changelog](https://img.shields.io/github/v/release/simonw/mbox-to-sqlite?include_prereleases&label=changelog)](https://github.com/simonw/mbox-to-sqlite/releases)
-[![Tests](https://github.com/simonw/mbox-to-sqlite/workflows/Test/badge.svg)](https://github.com/simonw/mbox-to-sqlite/actions?query=workflow%3ATest)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/simonw/mbox-to-sqlite/blob/master/LICENSE)
+Load email from .mbox files into SQLite, with Gmail export support and LLM optimization
 
-Load email from .mbox files into SQLite
+## Why This Fork?
+
+This is a fork of [simonw/mbox-to-sqlite](https://github.com/simonw/mbox-to-sqlite) with enhancements for real-world email processing:
+
+**Problem**: The original tool couldn't reliably process Gmail's exported .mbox files (from Google Takeout), which have different formatting and encoding quirks.
+
+**Solution**: Vibecoded fixes and added features I needed:
+- **Gmail Export Support**: Handles Gmail Takeout .mbox files correctly
+- **Chinese/CJK Text Search**: Integrated [simple tokenizer](https://github.com/wangfenjin/simple) for proper Chinese word segmentation and FTS
+- **LLM Optimization**: New `clean` command creates token-optimized databases (91% token reduction) by converting HTML→Markdown, removing signatures, and normalizing whitespace
+- **Two-Database Workflow**: Preserve original emails while creating cleaned versions for LLM consumption
+
+Credits to [Simon Willison](https://github.com/simonw) for the original project.
 
 ## Installation
 
 Install this tool using `pip`:
 
-    pip install mbox-to-sqlite
+    pip install mbox2sqlite-llm
+
+Or install from source:
+
+    git clone https://github.com/imZack/mbox-to-sqlite.git
+    cd mbox-to-sqlite
+    pip install -e .
 
 ## Usage
 
-Use the `mbox` command to import a `.mbox` file into a SQLite database:
+### Quick Start
 
-    mbox-to-sqlite mbox emails.db path/to/messages.mbox
+Import a Gmail Takeout .mbox file:
 
-You can try this out against an example containing a sample of 3,266 emails from the [Enron corpus](https://en.wikipedia.org/wiki/Enron_Corpus) like this:
+    mbox2sqlite-llm mbox emails.db path/to/All mail Including Spam and Trash.mbox
+
+Create an LLM-optimized cleaned version:
+
+    mbox2sqlite-llm clean emails.db emails-clean.db --level standard
+
+Explore with [Datasette](https://datasette.io/):
+
+    datasette emails-clean.db
+
+### Chinese/CJK Text Support
+
+For Chinese email content, use the simple tokenizer for proper word segmentation:
+
+    # Import with Chinese FTS
+    mbox2sqlite-llm mbox emails.db gmail.mbox --simple-tokenizer ./libsimple.dylib
+
+    # Clean with Chinese FTS
+    mbox2sqlite-llm clean emails.db emails-clean.db --simple-tokenizer ./libsimple.dylib
+
+Download `libsimple.dylib` (macOS) from [wangfenjin/simple](https://github.com/wangfenjin/simple) or build from source.
+
+### Commands
+
+**Import emails** (preserves original content):
+```bash
+mbox2sqlite-llm mbox emails.db messages.mbox
+```
+
+**Clean for LLM usage** (91% token reduction):
+```bash
+# Standard cleaning (recommended)
+mbox2sqlite-llm clean emails.db emails-clean.db --level standard
+
+# Aggressive cleaning (95% reduction)
+mbox2sqlite-llm clean emails.db emails-clean.db --level aggressive
+
+# Minimal cleaning (40% reduction, preserves more context)
+mbox2sqlite-llm clean emails.db emails-clean.db --level minimal
+```
+
+### Try It Out
+
+Test against a sample from the [Enron corpus](https://en.wikipedia.org/wiki/Enron_Corpus):
 
     curl -O https://raw.githubusercontent.com/ivanhb/EMA/master/server/data/mbox/enron/mbox-enron-white-s-all.mbox
-    mbox-to-sqlite mbox enron.db mbox-enron-white-s-all.mbox
-
-You can then explore the resulting database using [Datasette](https://datasette.io/):
-
-    datasette enron.db
+    mbox2sqlite-llm mbox enron.db mbox-enron-white-s-all.mbox
+    mbox2sqlite-llm clean enron.db enron-clean.db
+    datasette enron-clean.db
 
 ## Development
 

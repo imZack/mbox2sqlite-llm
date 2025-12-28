@@ -1,0 +1,45 @@
+name: Publish to TestPyPI
+
+on:
+  push:
+    tags:
+      - '*dev*'  # Triggers on tags like 0.9.0.dev1
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        uv sync --extra test
+    - name: Run tests
+      run: |
+        uv run pytest
+
+  deploy-test:
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+    - name: Set up Python
+      run: uv python install 3.10
+    - name: Build and publish to TestPyPI
+      env:
+        UV_PUBLISH_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
+      run: |
+        uv build
+        uv publish --publish-url https://test.pypi.org/legacy/

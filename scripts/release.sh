@@ -98,12 +98,12 @@ echo -e "\n${GREEN}✓ Pushed successfully!${NC}\n"
 
 if [ "$BUMP_TYPE" = "dev" ]; then
     echo -e "${GREEN}Dev version ${NEW_VERSION} will be published to TestPyPI${NC}"
-    echo -e "Check: https://github.com/imZack/mbox-to-sqlite/actions"
+    echo -e "Check: https://github.com/imZack/mbox2sqlite-llm/actions"
     echo -e "\nInstall from TestPyPI:"
     echo -e "  pip install --index-url https://test.pypi.org/simple/ mbox2sqlite-llm==${NEW_VERSION}"
 else
     echo -e "${YELLOW}Next steps:${NC}"
-    echo -e "1. Go to: https://github.com/imZack/mbox-to-sqlite/releases/new"
+    echo -e "1. Go to: https://github.com/imZack/mbox2sqlite-llm/releases/new"
     echo -e "2. Select tag: ${NEW_VERSION}"
     echo -e "3. Create release to trigger PyPI publish"
 fi

@@ -24,8 +24,8 @@ Install this tool using `pip`:
 
 Or install from source:
 
-    git clone https://github.com/imZack/mbox-to-sqlite.git
-    cd mbox-to-sqlite
+    git clone https://github.com/imZack/mbox2sqlite-llm.git
+    cd mbox2sqlite-llm
     pip install -e .
 
 ## Usage

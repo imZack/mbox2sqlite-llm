@@ -55,7 +55,7 @@ git tag 0.9.0
 git push origin main --tags
 
 # Create GitHub Release (triggers automatic PyPI publish)
-# Go to: https://github.com/imZack/mbox-to-sqlite/releases/new
+# Go to: https://github.com/imZack/mbox2sqlite-llm/releases/new
 # Select tag: 0.9.0
 # Click "Publish release"
 ```

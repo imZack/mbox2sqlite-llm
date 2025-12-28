@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.9.0.dev"
+VERSION = "0.9.0"
 
 
 def get_long_description():
@@ -18,11 +18,11 @@ setup(
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
     author="Zack Shih",
-    url="https://github.com/imZack/mbox-to-sqlite",
+    url="https://github.com/imZack/mbox2sqlite-llm",
     project_urls={
-        "Issues": "https://github.com/imZack/mbox-to-sqlite/issues",
-        "CI": "https://github.com/imZack/mbox-to-sqlite/actions",
-        "Changelog": "https://github.com/imZack/mbox-to-sqlite/releases",
+        "Issues": "https://github.com/imZack/mbox2sqlite-llm/issues",
+        "CI": "https://github.com/imZack/mbox2sqlite-llm/actions",
+        "Changelog": "https://github.com/imZack/mbox2sqlite-llm/releases",
     },
     license="Apache License, Version 2.0",
     version=VERSION,
